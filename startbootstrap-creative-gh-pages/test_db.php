@@ -21,7 +21,6 @@ try {
     $pdo = new PDO($dsn, $user, $pass, $options);
     echo "資料庫連線成功！<br>";
 
-    // 測試查詢 Residents 表
     $stmt = $pdo->query("SELECT * FROM Residents");
     $residents = $stmt->fetchAll();
 
