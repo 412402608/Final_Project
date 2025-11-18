@@ -11,7 +11,6 @@ $user = 'root';       // MySQL 帳號
 $pass = '';           // MySQL 密碼，如果沒有就留空
 $port = 3307;         // MySQL 埠號，XAMPP 預設是 3306
 
-// 建立 PDO 連線
 $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
