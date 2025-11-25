@@ -27,8 +27,8 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0">
                         <li class="nav-item"><a class="nav-link" href="#about">違規行為</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#services">住民資料</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#portfolio">簽到</a></li>
+                        <li class="nav-item"><a class="nav-link" href="information.php">住民資料</a></li>
+                        <li class="nav-item"><a class="nav-link" href="doom_back.php">簽到</a></li>
                         <li class="nav-item"><a class="nav-link" href="login.php">登入</a></li>
                     </ul>
                 </div>

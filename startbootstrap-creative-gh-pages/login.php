@@ -25,8 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["useraccount"] = $account;
             $_SESSION["userdoomnm"] = $row["userdoomnm"];
             $_SESSION["userrole"] = $row["userrole"];
-            // 決定登入成功後要導向哪個頁面(有redirect_to就導向redirect_to，否則導向index0.php)
-            $redirect = $_SESSION["redirect_to"] ?? "index0.html";
+            // 決定登入成功後要導向哪個頁面(有redirect_to就導向redirect_to，否則導向doom_back.php)
+            $redirect = $_SESSION["redirect_to"] ?? "doom_back.php";
             header("Location:" . $redirect);
             exit;
         } else {
@@ -55,12 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
                 <form method="POST" action="login.php">
                     <div class="form-floating mb-3">
-                        <input class="form-control" name="account" id="account" type="text" placeholder="Account" required>
+                        <input class="form-control" name="useraccount" id="account" type="text" placeholder="Account" required>
                        <label for="account">Account</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input class="form-control" name="password" id="password" type="password" placeholder="Password" required>
+                        <input class="form-control" name="userpassword" id="password" type="password" placeholder="Password" required>
                         <label for="password">Password</label>
                     </div>
 
