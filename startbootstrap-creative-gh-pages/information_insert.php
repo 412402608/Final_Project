@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if ($_SESSION['role'] != 'M') {
+if ($_SESSION['userrole'] != 'M') {
     include('header.php');
     $message = '只有管理員可以新增住戶資料';
     ?>
@@ -13,7 +13,7 @@ if ($_SESSION['role'] != 'M') {
     exit;
 }
 try {
-  require_once 'db.php';
+  require_once 'db1.php';
   $msg = "";
   if ($_POST) {
     // insert data

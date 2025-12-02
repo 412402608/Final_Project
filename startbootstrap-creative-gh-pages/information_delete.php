@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if ($_SESSION['role'] != 'M') {
+if ($_SESSION['userrole'] != 'M') {
     include('header.php');
     $message = '只有管理員可以刪除住戶資料';
     ?>
@@ -18,7 +18,7 @@ try {
   $room_number = "";
   $contact = "";
   if ($_GET) {
-    require_once 'db.php';
+    require_once 'db1.php';
     $action = $_GET["action"] ?? "";
     if ($action == "confirmed") {
       // delete data
