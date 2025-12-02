@@ -10,6 +10,17 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+ header {
+    color: #d41313; /* 整個 header 的文字顏色變白 */
+}
+
+header a:hover {
+    color: #ff6600; /* 滑鼠移上去變色 */
+}
+
+
+
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
