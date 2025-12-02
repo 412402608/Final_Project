@@ -12,7 +12,7 @@ $userdoomnm = $_SESSION["userdoomnm"] ?? "";
 
 // 若未登入，退回登入頁
 if ($useraccount == "") {
-    header("Location: login.php");
+    header("Location: log_in.php");
     exit;
 }
 
