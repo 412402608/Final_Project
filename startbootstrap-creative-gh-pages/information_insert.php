@@ -3,7 +3,7 @@ session_start();
 
 if ($_SESSION['userrole'] != 'M') {
     include('header.php');
-    $message = '只有管理員可以新增住戶資料';
+    $message = '只有管理員可新增住戶資料';
     ?>
     <div class="alert alert-primary" role="alert">
         <?= htmlspecialchars($message) ?>
