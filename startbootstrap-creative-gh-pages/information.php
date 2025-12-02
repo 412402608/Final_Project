@@ -74,7 +74,7 @@ try {
                 <td><?=htmlspecialchars($row["room_number"])?></td>
                 <td><?=htmlspecialchars($row["contact"])?></td>
                 <td>
-                    <a href="information_insert.php?student_id=<?=$row["student_id"]?>" class="btn btn-primary btn-sm">新增</a>
+                    
                     <a href="information_delete.php?student_id=<?=$row['student_id']?>" class="btn btn-danger btn-sm">刪除</a>
                 </td>
             </tr>

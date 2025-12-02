@@ -1,6 +1,6 @@
 <?php
 $servername = "localhost";
-$dbname = "doom";
+$dbname = "finalwork";
 $dbUsername = "root";
 $dbPassword = "A230736409";
 $conn = mysqli_connect($servername, $dbUsername, $dbPassword, $dbname);
