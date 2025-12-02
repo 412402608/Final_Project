@@ -1,3 +1,8 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -29,7 +34,13 @@
                         <li class="nav-item"><a class="nav-link" href="record.php">違規行為</a></li>
                         <li class="nav-item"><a class="nav-link" href="information.php">住民資料</a></li>
                         <li class="nav-item"><a class="nav-link" href="doom_back.php">簽到</a></li>
-                        <li class="nav-item"><a class="nav-link" href="login.php">登入</a></li>
+                        <li class="nav-item">
+  <?php if (!empty($_SESSION['useraccount'])): ?> 
+    <a class="nav-link" href="log_out.php">登出</a>
+  <?php else: ?>
+    <a class="nav-link" href="log_in.php">登入</a>
+  <?php endif; ?>
+</li>
                     </ul>
                 </div>
             </div>

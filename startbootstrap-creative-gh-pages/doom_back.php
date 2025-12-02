@@ -2,7 +2,7 @@
 <?php
 require_once "header.php";
 session_start();
-require_once "db1.php";
+require_once "db.php";
 
 // 檢查登入
 
@@ -15,7 +15,7 @@ $userdoomnm = $_SESSION["userdoomnm"] ?? "";
 
 // 若未登入，退回登入頁
 if ($useraccount == "") {
-    header("Location: login.php");
+    header("Location: log_out.php");
     exit;
 }
 

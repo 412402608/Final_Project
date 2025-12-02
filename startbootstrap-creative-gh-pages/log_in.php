@@ -1,7 +1,7 @@
 <?php
 require_once 'header.php';
 session_start();
-require_once 'db1.php';
+require_once 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // 從 $_POST 取出表單欄位 account,password 的值。若沒有此欄位或為 null，就用空字串 "" 當預設
@@ -30,11 +30,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header("Location:" . $redirect);
             exit;
         } else {
-            header("Location: login.php?msg=帳密錯誤");
+            header("Location: log_in.php?msg=帳密錯誤");
             exit;
         }
     } else {
-        header("Location: login.php?msg=帳號不存在");
+        header("Location: log_in.php?msg=帳號不存在");
         exit;
     }
 
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 } else {
     // 顯示登入表單
     echo '
-    <form method="POST" action="login.php">
+    <form method="POST" action="log_in.php">
      <section class="page-section" id="contact">
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <p class="text-muted mb-5">請輸入資料以進入網頁</p>
                     </div>
                 </div>
-                <form method="POST" action="login.php">
+                <form method="POST" action="log_in.php">
                     <div class="form-floating mb-3">
                         <input class="form-control" name="useraccount" id="account" type="text" placeholder="Account" required>
                        <label for="account">Account</label>

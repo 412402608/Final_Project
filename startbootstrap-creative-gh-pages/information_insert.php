@@ -13,7 +13,7 @@ if ($_SESSION['userrole'] != 'M') {
     exit;
 }
 try {
-  require_once 'db1.php';
+  require_once 'db.php';
   $msg = "";
   if ($_POST) {
     // insert data
