@@ -1,7 +1,6 @@
 <?php
 require_once 'header.php';
-session_start();
-require_once 'db.php';
+require_once 'db1.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // 從 $_POST 取出表單欄位 account,password 的值。若沒有此欄位或為 null，就用空字串 "" 當預設
