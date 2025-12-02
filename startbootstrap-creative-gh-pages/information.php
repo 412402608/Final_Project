@@ -1,8 +1,7 @@
 <?php
-session_start();
 if (empty($_SESSION['useraccount'])) {
     $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
-    header("Location: login.php");
+    header("Location: information.php");
     exit;
 }
 include('header.php');

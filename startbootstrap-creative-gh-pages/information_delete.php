@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 if ($_SESSION['userrole'] != 'M') {
     include('header.php');
