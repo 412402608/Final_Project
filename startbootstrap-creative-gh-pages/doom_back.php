@@ -8,17 +8,19 @@ require_once "db1.php";
 
 
 // 取得登入者資訊
+// 從 session 中取出 key 的值，否則以空字串代替。
 $useraccount = $_SESSION["useraccount"] ?? "";
 $userrole = $_SESSION["userrole"] ?? "";
 $userdoomnm = $_SESSION["userdoomnm"] ?? "";
 
-// 若未登入 → 退回登入頁
+// 若未登入，退回登入頁
 if ($useraccount == "") {
     header("Location: login.php");
     exit;
 }
 
 // 當使用者按下「簽到」
+// $_SERVER["REQUEST_METHOD"]是取得 HTTP 請求方法。
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // 如果是管理員，可以選擇要登記哪位住民
@@ -27,10 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         // 取得該住民的房號
         $sql = "SELECT userdoomnm FROM systemuser WHERE useraccount=?";
+        // 將 SQL 語句轉成準備語句，準備後可以安全地綁定參數。
         $stmt = mysqli_prepare($conn, $sql);
+        // 綁定參數到準備語句裡的 ?
         mysqli_stmt_bind_param($stmt, "s", $targetAccount);
+        // 執行SELECT userdoomnm FROM systemuser WHERE useraccount='$targetAccount'
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
+        // mysqli_fetch_assoc() 會回傳一個 關聯陣列
         $row = mysqli_fetch_assoc($result);
         $targetDoom = $row["userdoomnm"] ?? "";
     } 
@@ -79,9 +85,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 <option value="" disabled selected>請選擇住民帳號</option>
                                 
                                 <?php
+                                // 存取多筆資料的集合
                                 $sql = "SELECT useraccount FROM systemuser WHERE userrole='S'";
                                 $result = mysqli_query($conn, $sql);
                                 while ($row = mysqli_fetch_assoc($result)) {
+                                // 這行輸出 HTML <option> 標籤，用於 <select> 下拉選單。讓管理員可選擇簽到帳號。
                                     echo "<option value='" . $row["useraccount"] . "'>" . $row["useraccount"] . "</option>";
                                 }
                                 ?>
