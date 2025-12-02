@@ -6,7 +6,7 @@ require_once "db.php";
 // 檢查登入
 
 
-// 取得登入者資訊
+// 取得登入者資訊 
 // 從 session 中取出 key 的值，否則以空字串代替。
 $useraccount = $_SESSION["useraccount"] ?? "";
 $userrole = $_SESSION["userrole"] ?? "";

@@ -9,7 +9,7 @@ if ($_SESSION['userrole'] != 'M') {
     </div>
     <?php
     include('footer.php');
-    exit;
+    exit;  
 }
 try {
   $student_id = "";
