@@ -46,13 +46,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // 新增回報紀錄
-    $sql = "INSERT INTO returnlog (useraccount, userdoomnm, returntime)
-            VALUES (?, ?, NOW())";
+    $sql = "INSERT INTO returnlog (resident, returntime)
+            VALUES (?, NOW())";
 
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ss", $targetAccount, $targetDoom);
-    mysqli_stmt_execute($stmt);
+    if (!$stmt) {
+        die("Prepare failed: " . mysqli_error($conn));
+    }
 
+    mysqli_stmt_bind_param($stmt, "s", $targetAccount);
+
+    mysqli_stmt_execute($stmt) or die("Execute failed: " . mysqli_stmt_error($stmt));
+
+    mysqli_stmt_close($stmt);
     mysqli_close($conn);
 
     header("Location: yes.php");

@@ -11,15 +11,15 @@ include('header.php');
 
 
 try {
-    require_once 'db.php';
+    require_once 'db1.php';
     $order = $_POST["order"]??"";
     $searchtxt = mysqli_real_escape_string($conn, $_POST["searchtxt"] ?? "");
 
     $where = [];
     if ($searchtxt) {
-        $where[] = "(student_id like '%$searchtxt%' or name like '%$searchtxt%' or room_number like '%$searchtxt%' or contact like '%$searchtxt%')";
+        $where[] = "(record_id like '%$searchtxt%' or records like '%$searchtxt%' or record_time like '%$searchtxt%')";
     }
-    $sql = "SELECT * FROM residents";
+    $sql = "SELECT * FROM record";
     if (count($where) > 0) {
         $sql .= " WHERE " . implode(' AND ', $where);
     }
@@ -41,14 +41,13 @@ try {
         <div class="col-auto">
             <select name="order" class="form-select">
                 <option value="">選擇排序欄位</option>
-                <option value="student_id" <?=($order=="student_id")?'selected':''?>>學號</option>
-                <option value="name" <?=($order=="name")?'selected':''?>>姓名</option>
-                <option value="room_number" <?=($order=="room_number")?'selected':''?>>房號</option>
-                <option value="contact" <?=($order=="contact")?'selected':''?>>聯絡方式</option>
+                <option value="record_id" <?=($order=="record_id")?'selected':''?>>學生帳號</option>
+                <option value="records" <?=($order=="records")?'selected':''?>>姓名</option>
+                <option value="record_time" <?=($order=="record_time")?'selected':''?>>房號</option>
             </select>
         </div>
         <div class="col-auto">
-            <input type="text" name="searchtxt" class="form-control" placeholder="搜尋學號/姓名/房號/聯絡方式" value="<?=htmlspecialchars($searchtxt)?>">
+            <input type="text" name="searchtxt" class="form-control" placeholder="搜尋學生帳號/違規紀錄/違規時間" value="<?=htmlspecialchars($searchtxt)?>">
         </div>
         <div class="col-auto">
             <input type="submit" class="btn btn-info" value="搜尋">
@@ -59,23 +58,20 @@ try {
     <table id="jobTable" class="table table-bordered table-striped">
         <thead class="thead-dark">
             <tr>
-                <th>學號</th>
-                <th>姓名</th>
-                <th>房號</th>
-                <th>聯絡方式</th>
+                <th>學生帳號</th>
+                <th>違規紀錄</th>
+                <th>違規時間</th>
                 <th>操作</th>
             </tr>
         </thead>
         <tbody>
         <?php while($row = mysqli_fetch_assoc($result)) { ?>
             <tr>
-                <td><?=htmlspecialchars($row["student_id"])?></td>
-                <td><?=htmlspecialchars($row["name"])?></td>
-                <td><?=htmlspecialchars($row["room_number"])?></td>
-                <td><?=htmlspecialchars($row["contact"])?></td>
+                <td><?=htmlspecialchars($row["record_id"])?></td>
+                <td><?=htmlspecialchars($row["records"])?></td>
+                <td><?=htmlspecialchars($row["record_time"])?></td>
                 <td>
-                    <a href="information_insert.php?student_id=<?=$row["student_id"]?>" class="btn btn-primary btn-sm">新增</a>
-                    <a href="information_delete.php?student_id=<?=$row['student_id']?>" class="btn btn-danger btn-sm">刪除</a>
+                    <a href="information_delete.php?student_id=<?=$row['records']?>" class="btn btn-danger btn-sm">刪除</a>
                 </td>
             </tr>
         <?php } ?>
