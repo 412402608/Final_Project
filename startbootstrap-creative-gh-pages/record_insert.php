@@ -41,19 +41,111 @@ try {
   <div class="mb-3 row">
     <label for="_record_id" class="col-sm-2 col-form-label">使用者</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="record_id" id="_record_id" placeholder="使用者" required>
+      <input type="text" class="form-control" name="record_id" id="_record_id" required>
     </div>
   </div>
   <div class="mb-3 row">
     <label for="_records" class="col-sm-2 col-form-label">違規事項</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="records" id="_records" placeholder="違規事項" required>
+      <input type="text" class="form-control" name="records" id="_records" required>
     </div>
   </div>
   <div class="mb-3 row">
     <label for="_record_point" class="col-sm-2 col-form-label">違規點數</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="record_point" id="_record_point" placeholder="違規點數" required>
+      <input type="text" class="form-control" name="record_point" id="_record_point" 
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      required>
     </div>
   </div>
   <input class="btn btn-primary" type="submit" value="送出">
