@@ -11,7 +11,7 @@ include('header.php');
 
 
 try {
-    require_once 'db1.php';
+    require_once 'db.php';
     $order = $_POST["order"]??"";
     $searchtxt = mysqli_real_escape_string($conn, $_POST["searchtxt"] ?? "");
 
