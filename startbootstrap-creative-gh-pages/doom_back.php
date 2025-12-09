@@ -1,12 +1,12 @@
 
 <?php
 require_once "header.php";
-require_once "db1.php";
+require_once "db.php";
 
 // 檢查登入
 
 
-// 取得登入者資訊
+// 取得登入者資訊 
 // 從 session 中取出 key 的值，否則以空字串代替。
 $useraccount = $_SESSION["useraccount"] ?? "";
 $userrole = $_SESSION["userrole"] ?? "";
@@ -14,7 +14,7 @@ $userdoomnm = $_SESSION["userdoomnm"] ?? "";
 
 // 若未登入，退回登入頁
 if ($useraccount == "") {
-    header("Location: log_in.php");
+    header("Location: log_out.php");
     exit;
 }
 

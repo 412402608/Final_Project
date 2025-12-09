@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 if ($_SESSION['userrole'] != 'M') {
     include('header.php');
@@ -10,7 +9,7 @@ if ($_SESSION['userrole'] != 'M') {
     </div>
     <?php
     include('footer.php');
-    exit;
+    exit;  
 }
 try {
   $student_id = "";

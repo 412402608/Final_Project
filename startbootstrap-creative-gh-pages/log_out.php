@@ -2,6 +2,6 @@
 session_start();
 session_unset(); 
 session_destroy();
-header("Location: doom_back.php");
+header("Location: log_in.php");
 exit;
 ?>
