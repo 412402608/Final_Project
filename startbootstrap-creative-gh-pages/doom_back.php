@@ -1,7 +1,7 @@
 
 <?php
 require_once "header.php";
-require_once "db.php";
+require_once "db1.php";
 
 // 檢查登入
 
