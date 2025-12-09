@@ -11,7 +11,7 @@ include('header.php');
 
 
 try {
-    require_once 'db1.php';
+    require_once 'db.php';
     $order = $_POST["order"]??"";
     // 防止 SQL injection，??""是如果 $_POST["searchtxt"] 不存在 或 為 null，就使用 ""（空字串）當作預設值
     $searchtxt = mysqli_real_escape_string($conn, $_POST["searchtxt"] ?? "");
