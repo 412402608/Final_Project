@@ -13,6 +13,7 @@ include('header.php');
 try {
     require_once 'db.php';
     $order = $_POST["order"]??"";
+    // 防止 SQL injection，??""是如果 $_POST["searchtxt"] 不存在 或 為 null，就使用 ""（空字串）當作預設值
     $searchtxt = mysqli_real_escape_string($conn, $_POST["searchtxt"] ?? "");
 
     $where = [];
@@ -20,20 +21,27 @@ try {
         $where[] = "(record_id like '%$searchtxt%' or records like '%$searchtxt%' or record_point like '%$searchtxt%')";
     }
     $sql = "SELECT * FROM record";
+    // $sql .= 是 字串相加，implode() 會把陣列變成一個字串，如果 $where 陣列裡有條件，就將它們用 AND 串接成 WHERE 子句，並加到 SQL 語句後方
     if (count($where) > 0) {
         $sql .= " WHERE " . implode(' AND ', $where);
     }
+    // 如果 $order 不是空的，就加入 ORDER BY 排序條件
     if ($order) {
         $sql .= " ORDER BY $order";
     }
+    // 使用資料庫連線 $conn 執行 SQL 指令 $sql，並把結果存到 $result
     $result = mysqli_query($conn, $sql);
 ?>
 
 <!-- 將 padding-top 調整為 90px 避免 header 蓋住內容 -->
 <div class="container-fluid position-relative" style="padding-top:90px; padding-bottom:120px;">
     <!-- + 按鈕固定右上 -->
-    <a href="record_insert.php" class="btn btn-danger position-fixed" 
-   style="top:3rem; right:1rem; z-index:1050;">＋</a>
+     <?php if ($_SESSION['userrole']==='M'): ?> 
+                    <a href="record_insert.php" class="btn btn-danger position-fixed" 
+                     style="top:3rem; right:1rem; z-index:1050;">＋</a>
+                <?php else: 
+                    echo " "?>
+                <?php endif; ?>
 
 
     <!-- 搜尋與排序表單 -->
@@ -68,6 +76,7 @@ try {
         <tbody>
         <?php while($row = mysqli_fetch_assoc($result)) { ?>
             <tr>
+                <!-- htmlspecialchars避免 XSS 攻擊 -->
                 <td><?=htmlspecialchars($row["recordnm"])?></td>
                 <td><?=htmlspecialchars($row["record_id"])?></td>
                 <td><?=htmlspecialchars($row["records"])?></td>
@@ -91,7 +100,10 @@ try {
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
 <script>
+// 這是 jQuery 的標準寫法。
+// $(document).ready(function() {...})是等整個網頁（DOM）載入完成後，再執行裡面的程式碼。
 $(document).ready(function() {
+    // 抓取 id="jobTable" 的 HTML 元素
     $('#jobTable').DataTable({
         "paging": true,      // 分頁
         "ordering": true,    // 排序
