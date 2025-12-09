@@ -1,5 +1,5 @@
 <?php
-
+session_start(); 
 if ($_SESSION['userrole'] != 'M') {
     include('header.php');
     $message = '只有管理員可新增住戶資料';

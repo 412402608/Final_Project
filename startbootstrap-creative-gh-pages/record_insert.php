@@ -1,35 +1,32 @@
 <?php
 session_start();
-
-if ($_SESSION['role'] != 'M') {
+if ($_SESSION['userrole'] != 'M') {
     include('header.php');
-    $message = '只有管理員可以新增住戶資料';
+    $message = '只有管理員可以新增違規資料';
     ?>
     <div class="alert alert-primary" role="alert">
-        <?= htmlspecialchars($message) ?>
-    </div>
     <?php
     include('footer.php');
     exit;
 }
+// try放置可能會發生錯誤或例外的程式碼，此處指為管理員的情況
 try {
   require_once 'db.php';
   $msg = "";
   if ($_POST) {
     // insert data
-    $student_id = $_POST["student_id"];
-    $name = $_POST["name"];
-    $room_number = $_POST["room_number"];
-    $contact = $_POST["contact"];
+    $record_id = $_POST["record_id"];
+    $records = $_POST["records"];
+    $record_point = $_POST["record_point"];
 
-    $sql = "INSERT INTO residents (student_id, name, room_number, contact) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO record (record_id, records, record_point, recordnm) VALUES (?, ?, ?, ?)";
     $stmt = mysqli_stmt_init($conn);
     mysqli_stmt_prepare($stmt, $sql);
-    mysqli_stmt_bind_param($stmt, "ssss", $student_id, $name, $room_number, $contact);
+    mysqli_stmt_bind_param($stmt, "ssss", $record_id, $records, $record_point, $recordnm);
     $result = mysqli_stmt_execute($stmt);
 
     if ($result) {
-      header('Location: information.php');
+      header('Location: record.php');
       exit;
     }
     else {
@@ -40,29 +37,23 @@ try {
 ?>
 <div class="container-fluid position-relative" style="padding-top:90px; padding-bottom:120px;">
 <div class="container">
-<form action="information_insert.php" method="post">
+<form action="record_insert.php" method="post">
   <div class="mb-3 row">
-    <label for="_student_id" class="col-sm-2 col-form-label">學號</label>
+    <label for="_record_id" class="col-sm-2 col-form-label">使用者</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="student_id" id="_student_id" placeholder="學號" required>
+      <input type="text" class="form-control" name="record_id" id="_record_id" placeholder="使用者" required>
     </div>
   </div>
   <div class="mb-3 row">
-    <label for="_name" class="col-sm-2 col-form-label">姓名</label>
+    <label for="_records" class="col-sm-2 col-form-label">違規事項</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="name" id="_name" placeholder="姓名" required>
+      <input type="text" class="form-control" name="records" id="_records" placeholder="違規事項" required>
     </div>
   </div>
   <div class="mb-3 row">
-    <label for="_room_number" class="col-sm-2 col-form-label">房號</label>
+    <label for="_record_point" class="col-sm-2 col-form-label">違規點數</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="room_number" id="_room_number" placeholder="房號" required>
-    </div>
-  </div>
-  <div class="mb-3 row">
-    <label for="_contact" class="col-sm-2 col-form-label">聯絡方式</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" name="contact" id="_contact" placeholder="聯絡方式" required>
+      <input type="text" class="form-control" name="record_point" id="_record_point" placeholder="違規點數" required>
     </div>
   </div>
   <input class="btn btn-primary" type="submit" value="送出">

@@ -1,5 +1,5 @@
 <?php
-
+session_start(); 
 if ($_SESSION['userrole'] != 'M') {
     include('header.php');
     $message = '只有管理員可以刪除住戶資料';
