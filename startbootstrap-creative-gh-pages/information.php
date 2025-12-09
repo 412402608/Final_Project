@@ -68,7 +68,7 @@ try {
         </thead>
         <tbody>
         <?php while($row = mysqli_fetch_assoc($result)) { ?>
-            <tr>
+            <tr> 
                 <td><?=htmlspecialchars($row["student_id"])?></td>
                 <td><?=htmlspecialchars($row["name"])?></td>
                 <td><?=htmlspecialchars($row["room_number"])?></td>
