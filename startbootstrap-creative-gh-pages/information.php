@@ -1,16 +1,17 @@
 <?php
+include('header.php');
+
 if (empty($_SESSION['useraccount'])) {
     $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
-    header("Location: information.php");
+    header("Location: log_in.php");
     exit;
 }
-include('header.php');
 ?>
 <?php
 
 
 try {
-    require_once 'db1.php';
+    require_once 'db.php';
     $order = $_POST["order"]??"";
     $searchtxt = mysqli_real_escape_string($conn, $_POST["searchtxt"] ?? "");
 
