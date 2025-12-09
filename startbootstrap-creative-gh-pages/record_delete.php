@@ -20,15 +20,20 @@ try {
   $record_point = "";
   $recordnm="";
   if ($_GET) {
-    require_once 'db1.php';
+    require_once 'db.php';
     $action = $_GET["action"] ?? "";
     if ($action == "confirmed") {
       // delete data
       $recordnm = $_GET["recordnm"];
+      // 只刪除 recordnm 等於某個值的資料
       $sql = "DELETE FROM record WHERE recordnm=?";
+      // 是建立 stmt 物件
       $stmt = mysqli_stmt_init($conn);
+      // 是把 SQL 塞進去
       mysqli_stmt_prepare($stmt, $sql);
+      // 是塞變數
       mysqli_stmt_bind_param($stmt, "s", $recordnm);
+      // 執行
       $result = mysqli_stmt_execute($stmt);
       mysqli_close($conn);
       header('Location:record.php');
@@ -42,6 +47,7 @@ try {
       mysqli_stmt_bind_param($stmt, "s", $recordnm);
       $res = mysqli_stmt_execute($stmt);
       if ($res) {
+        // 回傳每個欄位
         mysqli_stmt_bind_result($stmt, $recordnm, $record_id, $records, $record_point);
         mysqli_stmt_fetch($stmt);
       }
