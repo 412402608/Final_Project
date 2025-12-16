@@ -11,7 +11,7 @@ include('header.php');
 
 
 try {
-    require_once 'db1.php';
+    require_once 'db.php';
     $order = $_POST["order"]??"";
     // 防止 SQL injection，??""是如果 $_POST["searchtxt"] 不存在 或 為 null，就使用 ""（空字串）當作預設值
     $searchtxt = mysqli_real_escape_string($conn, $_POST["searchtxt"] ?? "");
@@ -96,33 +96,102 @@ try {
 </div>
 
  <?php
-    //每位學生的違規點數加總
-    $sql_sum = "SELECT record_id, SUM(record_point) AS total_points FROM record";
-    if (count($where) > 0) {
-        $sql_sum .= " WHERE " . implode(' AND ', $where); // 套用同樣的搜尋條件
-    }
-    $sql_sum .= " GROUP BY record_id ORDER BY record_id";
-    $result_sum = mysqli_query($conn, $sql_sum);
-    ?>
-    <h5 class="mt-4">每位學生違規點數加總</h5>
-    <table id="sumTable" class="table table-bordered table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th>學生帳號</th>
-                <th>違規點數加總</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php while($row_sum = mysqli_fetch_assoc($result_sum)) { ?>
-            <tr>
-                <td><?=htmlspecialchars($row_sum["record_id"])?></td>
-                <td><?= (int)$row_sum["total_points"] ?></td>
-            </tr>
-        <?php } ?>
-        </tbody>
-    </table>
+$sql_sum = "SELECT record_id, SUM(record_point) AS total_points FROM record";
+if (count($where) > 0) {
+    $sql_sum .= " WHERE " . implode(' AND ', $where);
+}
+$sql_sum .= " GROUP BY record_id ORDER BY record_id";
 
+$result_sum = mysqli_query($conn, $sql_sum);
+
+$sumData = [];
+$students = [];
+$points = [];
+
+while ($row = mysqli_fetch_assoc($result_sum)) {
+    $sumData[] = $row;
+    $students[] = $row["record_id"];
+    $points[] = (int)$row["total_points"];
+}
+?>
+
+    <h5 class="mt-4">每位學生違規點數加總</h5>
+<table id="sumTable" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>學生帳號</th>
+            <th>違規點數加總</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($sumData as $row): ?>
+        <tr>
+            <td><?= htmlspecialchars($row["record_id"]) ?></td>
+            <td><?= (int)$row["total_points"] ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+
+<div class="container mt-4 mb-4" style="max-width:800px; height:380px;">
+  <h5 class="mb-3">違規點數總和統計圖（橫向）</h5>
+  <canvas id="sumChart"></canvas>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('sumChart').getContext('2d');
+
+// 自動產生隨機顏色（讓每位學生不同顏色）
+const randomColor = (n) => {
+  const colors = [];
+  for (let i = 0; i < n; i++) {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    colors.push(`rgba(${r},${g},${b},0.6)`);
+  }
+  return colors;
+};
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: <?=json_encode($students, JSON_UNESCAPED_UNICODE)?>,
+    datasets: [{
+      label: '違規點數總和',
+      data: <?=json_encode($points, JSON_NUMERIC_CHECK)?>,
+      backgroundColor: randomColor(<?=count($students)?>),
+      borderColor: 'rgba(0,0,0,0.8)',
+      borderWidth: 1,
+      borderRadius: 4
+    }]
+  },
+  options: {
+    indexAxis: 'y', // ✅ 橫向
+    responsive: true,
+    maintainAspectRatio: false, // ✅ 控制大小由外層容器決定
+    scales: {
+      x: {
+        beginAtZero: true,
+        title: { display: true, text: '違規點數' }
+      },
+      y: {
+        title: { display: true, text: '學生帳號' }
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `違規點數：${ctx.parsed.x}`
+        }
+      }
+    }
+  }
+});
+</script>
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

@@ -39,7 +39,7 @@ try {
 <div class="container">
 <form action="record_insert.php" method="post">
   <div class="mb-3 row">
-    <label for="_record_id" class="col-sm-2 col-form-label">使用者</label>
+    <label for="_record_id" class="col-sm-2 col-form-label">姓名</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" name="record_id" id="_record_id" required>
     </div>
@@ -54,97 +54,6 @@ try {
     <label for="_record_point" class="col-sm-2 col-form-label">違規點數</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" name="record_point" id="_record_point" 
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       required>
     </div>
   </div>

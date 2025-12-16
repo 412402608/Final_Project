@@ -20,7 +20,7 @@ try {
   $record_point = "";
   $recordnm="";
   if ($_GET) {
-    require_once 'db1.php';
+    require_once 'db.php';
     $action = $_GET["action"] ?? "";
     if ($action == "confirmed") {
       // delete data

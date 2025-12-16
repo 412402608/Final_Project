@@ -33,6 +33,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <ul class="navbar-nav ms-auto my-2 my-lg-0">
                         <li class="nav-item"><a class="nav-link" href="record.php">違規行為</a></li>
                         <li class="nav-item"><a class="nav-link" href="information.php">住民資料</a></li>
+                        <li class="nav-item"><a class="nav-link" href="fileupload.php">檔案上傳</a></li>
                         <li class="nav-item"><a class="nav-link" href="doom_back.php">簽到</a></li>
                         <li class="nav-item">
   <?php if (!empty($_SESSION['useraccount'])): ?> 
