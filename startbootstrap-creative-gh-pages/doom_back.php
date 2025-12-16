@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 while ($row = mysqli_fetch_assoc($result)) {
                                 // 這行輸出 HTML <option> 標籤，用於 <select> 下拉選單。讓管理員可選擇簽到帳號。
                                 // value='...' → <option> 的值，送表單時會傳給 PHP
-                                
+
                                     echo "<option value='" . $row["useraccount"] . "'>" . $row["useraccount"] . "</option>";
                                 }
                                 ?>
@@ -115,7 +115,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </section>
 <?php
 try {
-    require_once 'db.php';
     $order = $_POST["order"]??"";
     $searchtxt = mysqli_real_escape_string($conn, $_POST["searchtxt"] ?? "");
 
@@ -125,7 +124,11 @@ try {
     }
     if ($userrole == "M") {
         $sql = "SELECT * FROM returnlog";
+        // 將 SQL 語句轉成準備語句，準備後可以安全地綁定參數。
         $stmt = mysqli_prepare($conn, $sql);
+        // 執行(寫進資料庫)
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
     }else{
         $sql = "SELECT * FROM returnlog WHERE resident = ?";
         $stmt = mysqli_prepare($conn, $sql);
@@ -135,6 +138,8 @@ try {
         $result = mysqli_stmt_get_result($stmt);
     }
     if (count($where) > 0) {
+        // implode 是 PHP 函數，把陣列元素用指定字串連接成一個字串
+        // SELECT * FROM returnlog WHERE resident LIKE '%user%' AND returntime > $today
         $sql .= " WHERE " . implode(' AND ', $where);
     }
     if ($order) {
@@ -152,7 +157,7 @@ try {
 
 
     <!-- 搜尋與排序表單 -->
-    <form action="information.php" method="post" class="row g-2 align-items-center mb-2">
+    <form action="doom_back.php" method="post" class="row g-2 align-items-center mb-2">
         <div class="col-auto">
             <select name="order" class="form-select">
                 <option value="">選擇排序欄位</option>
@@ -204,33 +209,30 @@ $(document).ready(function() {
 <?php
 
 date_default_timezone_set('Asia/Taipei');
-require_once("db.php");
 
 // 1️⃣ 取得今天日期與今晚 23:00
 $today = date('Y-m-d');
 $deadline = $today . " 23:00:00";
 
-// 2️⃣ 如果現在還沒到 23:00，就不用檢查
-if (date('Y-m-d H:i:s') < $deadline or $userrole==="M") {
-    exit;
-}
+// 只在已到當天 23:00 且非管理者時執行寄信檢查，避免中途 terminate 頁面
+if (date('Y-m-d H:i:s') >= $deadline && $userrole !== "M") {
+    // 查詢今天是否有任何簽到紀錄(只要第一筆資料)
+    $sql = "
+        SELECT 1 
+        FROM returnlog 
+        WHERE DATE(returntime) = ?
+        LIMIT 1
+    ";
 
-// 3️⃣ 查詢今天是否有任何簽到紀錄(只要第一筆資料)
-$sql = "
-    SELECT 1 
-    FROM returnlog 
-    WHERE DATE(returntime) = ?
-    LIMIT 1
-";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $today);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "s", $today);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-// 4️⃣ 如果沒有任何紀錄 → 啟動寄信
-if (mysqli_num_rows($result) === 0) {
-    require_once("sendemail.php");
+    // 如果沒有任何紀錄 → 啟動寄信
+    if (mysqli_num_rows($result) === 0) {
+        require_once("sendemail.php");
+    }
 }
 
 
