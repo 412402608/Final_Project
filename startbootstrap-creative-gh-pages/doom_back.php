@@ -110,9 +110,85 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </div>
 </section>
+<?php
+try {
+    require_once 'db.php';
+    $order = $_POST["order"]??"";
+    $searchtxt = mysqli_real_escape_string($conn, $_POST["searchtxt"] ?? "");
+
+    $where = [];
+    if ($searchtxt) {
+        $where[] = "(resident like '%$searchtxt%' or returntime like '%$searchtxt%')";
+    }
+    $sql = "SELECT * FROM returnlog";
+    if (count($where) > 0) {
+        $sql .= " WHERE " . implode(' AND ', $where);
+    }
+    if ($order) {
+        $sql .= " ORDER BY $order";
+    }
+    $result = mysqli_query($conn, $sql);
+    mysqli_close($conn); 
+} catch(Exception $e) {
+    echo 'Message: ' . $e->getMessage();
+}
+?>
+
+<!-- 將 padding-top 調整為 90px 避免 header 蓋住內容 -->
+<div class="container-fluid position-relative" style="padding-top:90px; padding-bottom:120px;">
 
 
+    <!-- 搜尋與排序表單 -->
+    <form action="information.php" method="post" class="row g-2 align-items-center mb-2">
+        <div class="col-auto">
+            <select name="order" class="form-select">
+                <option value="">選擇排序欄位</option>
+                <option value="resident" <?=($order=="resident")?'selected':''?>>使用者</option>
+                <option value="returntime" <?=($order=="returntime")?'selected':''?>>簽到時間</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <input type="text" name="searchtxt" class="form-control" placeholder="搜尋使用者/簽到時間" value="<?=htmlspecialchars($searchtxt)?>">
+        </div>
+        <div class="col-auto">
+            <input type="submit" class="btn btn-info" value="搜尋">
+        </div>
+    </form>
+
+    <!-- 表格 -->
+    <table id="jobTable" class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>使用者</th>
+                <th>簽到時間</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php while($row = mysqli_fetch_assoc($result)) { ?>
+            <tr> 
+                <td><?=htmlspecialchars($row["resident"])?></td>
+                <td><?=htmlspecialchars($row["returntime"])?></td>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+</div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#jobTable').DataTable({
+        "paging": true,      // 分頁
+        "ordering": true,    // 排序
+        "searching": false   // 關閉搜尋框
+    });
+});
+</script>
 
 <?php
+
 require_once 'footer.php';
 ?>
