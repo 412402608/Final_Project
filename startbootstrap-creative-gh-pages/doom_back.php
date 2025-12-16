@@ -120,14 +120,24 @@ try {
     if ($searchtxt) {
         $where[] = "(resident like '%$searchtxt%' or returntime like '%$searchtxt%')";
     }
-    $sql = "SELECT * FROM returnlog";
+    if ($userrole == "M") {
+        $sql = "SELECT * FROM returnlog";
+        $stmt = mysqli_prepare($conn, $sql);
+    }else{
+        $sql = "SELECT * FROM returnlog WHERE resident = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "s", $useraccount);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+    }
     if (count($where) > 0) {
         $sql .= " WHERE " . implode(' AND ', $where);
     }
     if ($order) {
         $sql .= " ORDER BY $order";
     }
-    $result = mysqli_query($conn, $sql);
+    mysqli_stmt_execute($stmt);
     mysqli_close($conn); 
 } catch(Exception $e) {
     echo 'Message: ' . $e->getMessage();
@@ -187,6 +197,42 @@ $(document).ready(function() {
     });
 });
 </script>
+
+<?php
+
+date_default_timezone_set('Asia/Taipei');
+require_once("db.php"); // 你的資料庫連線檔
+
+// 1️⃣ 取得今天日期與今晚 23:00
+$today = date('Y-m-d');
+$deadline = $today . " 23:00:00";
+
+// 2️⃣ 如果現在還沒到 23:00，就不用檢查
+if (date('Y-m-d H:i:s') < $deadline) {
+    exit("尚未到檢查時間");
+}
+
+// 3️⃣ 查詢今天是否有任何簽到紀錄(只要第一筆資料)
+$sql = "
+    SELECT 1 
+    FROM returnlog 
+    WHERE DATE(returntime) = ?
+    LIMIT 1
+";
+
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "s", $today);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+
+// 4️⃣ 如果沒有任何紀錄 → 啟動寄信
+if (mysqli_num_rows($result) === 0) {
+    require_once("sendemail.php");
+}
+
+
+?>
+
 
 <?php
 
