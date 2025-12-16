@@ -93,8 +93,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 // 存取多筆資料的集合
                                 $sql = "SELECT useraccount FROM systemuser WHERE userrole='S'";
                                 $result = mysqli_query($conn, $sql);
+                                // 從查詢結果中取出一筆資料
                                 while ($row = mysqli_fetch_assoc($result)) {
                                 // 這行輸出 HTML <option> 標籤，用於 <select> 下拉選單。讓管理員可選擇簽到帳號。
+                                // value='...' → <option> 的值，送表單時會傳給 PHP
+                                
                                     echo "<option value='" . $row["useraccount"] . "'>" . $row["useraccount"] . "</option>";
                                 }
                                 ?>
@@ -201,15 +204,15 @@ $(document).ready(function() {
 <?php
 
 date_default_timezone_set('Asia/Taipei');
-require_once("db.php"); // 你的資料庫連線檔
+require_once("db.php");
 
 // 1️⃣ 取得今天日期與今晚 23:00
 $today = date('Y-m-d');
 $deadline = $today . " 23:00:00";
 
 // 2️⃣ 如果現在還沒到 23:00，就不用檢查
-if (date('Y-m-d H:i:s') < $deadline) {
-    exit("尚未到檢查時間");
+if (date('Y-m-d H:i:s') < $deadline or $userrole==="M") {
+    exit;
 }
 
 // 3️⃣ 查詢今天是否有任何簽到紀錄(只要第一筆資料)
