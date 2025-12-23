@@ -2,7 +2,7 @@
 include('header.php');
 
 if (empty($_SESSION['useraccount'])) {
-    $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: log_in.php");
     exit;
 }

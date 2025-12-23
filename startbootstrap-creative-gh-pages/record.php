@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (empty($_SESSION['useraccount'])) {
-    $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: log_in.php");
     exit;
 }
@@ -83,6 +83,7 @@ try {
                 <td><?=htmlspecialchars($row["record_point"])?></td>
                 <td>
                 <?php if ($_SESSION['userrole']==='M'): ?> 
+                    <!-- 用recordnm刪除 -->
                     <a href="record_delete.php?recordnm=<?=$row['recordnm']?>" class="btn btn-danger btn-sm">刪除</a>
                 <?php else: 
                     echo " "?>
@@ -95,19 +96,27 @@ try {
     </table>
 </div>
 
+
+
  <?php
+//  計算每位學生違規點數總和
 $sql_sum = "SELECT record_id, SUM(record_point) AS total_points FROM record";
+// 如果查詢結果>0
 if (count($where) > 0) {
+    // $sql_sum +=後面的字串(implode(分隔字串，陣列)是拼接字串的行為)
     $sql_sum .= " WHERE " . implode(' AND ', $where);
 }
+// 同一個 record_id 的多筆資料，全部加起來，變成一筆結果
 $sql_sum .= " GROUP BY record_id ORDER BY record_id";
 
+// 執行查詢
 $result_sum = mysqli_query($conn, $sql_sum);
-
+// 準備資料給圖表使用
 $sumData = [];
 $students = [];
 $points = [];
 
+// 把查詢結果放到陣列中
 while ($row = mysqli_fetch_assoc($result_sum)) {
     $sumData[] = $row;
     $students[] = $row["record_id"];
@@ -124,6 +133,9 @@ while ($row = mysqli_fetch_assoc($result_sum)) {
         </tr>
     </thead>
     <tbody>
+    <!-- 顯示每位學生的違規點數總和，foreach是陣列迴圈，逐一讀取陣列資料 -->
+    <!-- $sumData as $row:從 $sumData 這個陣列裡，一筆一筆拿資料出來，每次拿到的那一筆，暫時叫做 $row。 -->
+    <!-- while 用在「資料還沒全部拿到時」foreach 用在「資料已經是陣列時」 -->
     <?php foreach ($sumData as $row): ?>
         <tr>
             <td><?= htmlspecialchars($row["record_id"]) ?></td>
